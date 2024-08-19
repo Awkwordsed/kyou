@@ -6,7 +6,6 @@ import (
   "crypto/rand"
   "encoding/hex"
   "fmt"
- // "io/ioutil"
   "os"
   "io"
 )
