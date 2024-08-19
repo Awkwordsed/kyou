@@ -6,10 +6,33 @@ import (
   "crypto/rand"
   "encoding/hex"
   "fmt"
-  "io/ioutil"
+ // "io/ioutil"
   "os"
   "io"
 )
+
+func shstat() {
+	const myFilePath = "shadow"
+
+	if _, err := os.Stat(myFilePath); err != nil {
+		if os.IsNotExist(err) {
+      // Create the file using the CreateFile function
+      file, err := os.Create("shadow")
+      if err != nil {
+        fmt.Println("Error creating the file:", err)
+        return
+      }
+      defer file.Close()
+
+      fmt.Println("Made new shadow file")
+
+	} else {
+			panic(err)
+		}
+	} else {
+	    fmt.Println("The shadow file exist") 
+	}
+}
 
 func main() {
     // Data Preparation
@@ -52,23 +75,25 @@ func main() {
     // Convert to Hexadecimal
     enc := hex.EncodeToString(ciphertext)
 
+    shstat()
     
-    // Create the file using the CreateFile function
-    file, err := os.Create("filename.txt")
+    f, err := os.OpenFile("shadow", os.O_APPEND|os.O_WRONLY, 0600)
     if err != nil {
-      fmt.Println("Error creating the file:", err)
-      return
+        panic(err)
     }
-    defer file.Close()
+    defer f.Close()
 
+    if _, err = f.WriteString(enc); err != nil {
+        panic(err)
+    }
     // Write the variable's value to the file
-    err = ioutil.WriteFile("filename.txt", []byte(enc), 0644)
-    if err != nil {
-      fmt.Println("Error writing to the file:", err)
-      return
-    }
+    //  err = ioutil.WriteFile("shadow", []byte(enc), 0644)
+    //  if err != nil {
+    //    fmt.Println("Error writing to the file:", err)
+    //    return
+    //  }
 
-    fmt.Println("Variable written to the file successfully.")
+    fmt.Println("Save successful.")
 
 
 }
