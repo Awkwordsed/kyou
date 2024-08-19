@@ -86,12 +86,7 @@ func main() {
     if _, err = f.WriteString(enc); err != nil {
         panic(err)
     }
-    // Write the variable's value to the file
-    //  err = ioutil.WriteFile("shadow", []byte(enc), 0644)
-    //  if err != nil {
-    //    fmt.Println("Error writing to the file:", err)
-    //    return
-    //  }
+
 
     fmt.Println("Save successful.")
 
