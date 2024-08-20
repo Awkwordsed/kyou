@@ -34,9 +34,15 @@ func shstat() {
 }
 
 func main() {
+
+    // Make New user
+    var usern string
+    fmt.Println("Enter new username: ")
+    fmt.Scanln(&usern)
+
     // Data Preparation
     var data string
-    fmt.Println("Input: ")
+    fmt.Println("Password for new username: ")
     fmt.Scanln(&data)
     plaintext := []byte(data)
 
@@ -68,6 +74,7 @@ func main() {
         return
     }
 
+
     // Encrypting the data using GCM mode
     ciphertext := gcm.Seal(nonce, nonce, plaintext, nil)
 
@@ -75,18 +82,18 @@ func main() {
     enc := hex.EncodeToString(ciphertext)
 
     shstat()
-    
+   
+
+    // Write to the shadow file
     f, err := os.OpenFile("shadow", os.O_APPEND|os.O_WRONLY, 0600)
     if err != nil {
         panic(err)
     }
     defer f.Close()
 
-    if _, err = f.WriteString(enc); err != nil {
+    if _, err = f.WriteString(usern + " :: " + enc + "\n"); err != nil {
         panic(err)
     }
-
-
     fmt.Println("Save successful.")
 
 
